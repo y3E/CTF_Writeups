@@ -64,7 +64,7 @@ since the program is comparing, i assume that the comparisons must return true.
 0x08048645 <+62>:	fucomip st,st(1)
 ```
 
-the program is referencing the variable ebp-0xc, we need to find the value until the value ebp-0xc overflow :
+the program is referencing the variable ebp-0xc and then comparing with the value in address 0x804876c, we need to find a value until the value of ebp-0xc overflow :
 
 ```
 python -c "print 'a'*60" > weq
