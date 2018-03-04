@@ -93,8 +93,8 @@ ayyy
 ```
 it is found that 65 character overflow the ebp-0xc
 ```
-now to access the ebp-0xc memory, we need 64 character.
-and the find the value that need to be replaced.
+the digit '61' means 65 is one number higher, to get a blank spot ebp-0xc we need 64 character so the first value is 0x00000000.
+Now to concate what value in the compare destination so fucomip will return true.
 
 ```
 (gdb) x/10wx 0x804876c
