@@ -52,7 +52,7 @@ Dump of assembler code for function main:
 End of assembler dump.
 (gdb) 
 ```
-As we can see that the program is using return instruction (and the chalange title is rop(return oriented programming)) i surmise that we need to manipulate the return instruction to call a function for printing the flag. Then we need to see the list of functions in this program.
+As we can see that the program is using return instruction (and the chalange title is rop(return oriented programming)) i surmise that we need to manipulate the return instruction to call a function for printing the flag. We need to see the list of functions in this program first.
 
 ```
 --------------------
